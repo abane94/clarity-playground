@@ -17,6 +17,10 @@ interface TextFormFieldDefinition extends FormFieldDefinitionBase<string> {
   type: 'TEXT' | 'TEXTAREA';
 }
 
+interface DateFormFieldDefinition extends FormFieldDefinitionBase<Date> {
+  type: 'DATE';
+}
+
 interface NumberFormFieldDefinition extends FormFieldDefinitionBase<number> {
   type: 'NUMBER';
   step?: number;
@@ -27,11 +31,13 @@ interface BoolFormFieldDefinition extends FormFieldDefinitionBase<boolean> {
   type: 'CHECK' | 'TOGGLE'
   // TODO: will this work, using the same interface, because there might not be a reason to seperate
   // TODO: alternative the one reason to seperate could be tri-state fields, but that might still be achievable with the same interface
+  // TODO: Update: toggle might be for binary options that are not on/off / yes/no types of things
 }
 
 interface OptionDefinition {
   value: string;
   display: string;
+  default?: true;
 }
 
 interface OptionsSource {
@@ -41,6 +47,7 @@ interface OptionsSource {
 
 interface MultiFormFieldDefinition {
   type: 'RADIO' | 'AUTOCOMPLETE' | 'SELECT';
+  // TODO: clarity differentiates SELECT and COMBOBOXES where COMBOBOXES are used for filtering autocomplete data-backing options. SELECTS are simple
   required?: boolean;  // this is required here to use this property on the generic FormFieldDefinition
   key: string;
   label: string;
@@ -49,7 +56,7 @@ interface MultiFormFieldDefinition {
 }
 
 
-type FormFieldDefinition = TextFormFieldDefinition | NumberFormFieldDefinition | BoolFormFieldDefinition | MultiFormFieldDefinition;
+type FormFieldDefinition = TextFormFieldDefinition | NumberFormFieldDefinition | BoolFormFieldDefinition | MultiFormFieldDefinition | DateFormFieldDefinition;
 
 interface FormDefinition {
   key: string;
@@ -82,11 +89,45 @@ export class UserDefinedFormViewerComponent implements OnInit {
         // placeholder: 'Name',
         // default
         required: false
+      },
+      {
+        type: 'CHECK',
+        key: 'programer',
+        label: 'Are you a programmer?',
+        default: false
+      }, {
+        type: 'SELECT',
+        key: 'language',
+        label: 'What language do you program in?',
+        multiple: false,
+        options: {
+          type: 'PLAINTEXT',
+          options: [{
+            display: 'Java',
+            value: 'java'
+          },{
+            display: 'c++',
+            value: 'cpp'
+          },{
+            display: 'Typescript',
+            value: 'ts'
+          }]
+        }
+      },
+      {
+        type: 'DATE',
+        key: 'start',
+        label: 'When did you start coding?',
       }
     ]
   };
 
+  newDate = () => new Date()
+
   public form: FormGroup | undefined;
+
+  // helper methods to cast the fields in the template
+  castOptionsField = (f: FormFieldDefinition) => (f as MultiFormFieldDefinition)
 
   constructor(private fb: FormBuilder) { }
 
@@ -99,7 +140,19 @@ export class UserDefinedFormViewerComponent implements OnInit {
           if (fieldDef.required) { formObj[fieldDef.key].push(Validators.required); }
           break;
         case 'NUMBER':
-          formObj[fieldDef.key] = [fieldDef.default || '']
+          formObj[fieldDef.key] = [fieldDef.default || 0]
+          if (fieldDef.required) { formObj[fieldDef.key].push(Validators.required); }
+          break;
+        case 'CHECK':
+          formObj[fieldDef.key] = [fieldDef.default || false];
+          // if (fieldDef.required) { formObj[fieldDef.key].push(Validators.required); }  // TODO: I dont think 'required' makes sense for checkboxes
+          break;
+        case 'SELECT':
+          formObj[fieldDef.key] = [];
+          if (fieldDef.required) { formObj[fieldDef.key].push(Validators.required); }
+          break;
+        case 'DATE':
+          formObj[fieldDef.key] = [new Date()];
           if (fieldDef.required) { formObj[fieldDef.key].push(Validators.required); }
           break;
         default:
@@ -108,6 +161,10 @@ export class UserDefinedFormViewerComponent implements OnInit {
     }
     this.form = this.fb.group(formObj);
 
+  }
+
+  printValue() {
+    console.log(this.form?.value);
   }
 
 }

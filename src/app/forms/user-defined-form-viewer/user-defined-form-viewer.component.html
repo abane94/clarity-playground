@@ -23,9 +23,40 @@
                     <clr-control-error>Error message that appears after focus is lost and control is invalid</clr-control-error>
                 </clr-input-container>
             </div>
+            <div *ngSwitchCase="'CHECK'">
+                <!-- <input [formControlName]="field.key" type="number" [step]="field.step">TODO: if step id not defined will this cause an issue?-->
+                <clr-checkbox-container>
+                    <clr-checkbox-wrapper>
+                        <label>{{ field.label }}{{ field.required ? '*' : '' }}</label>
+                        <input clrCheckbox type="checkbox" [formControlName]="field.key"/> <!--  [step]="field.step" -->
+                        <clr-control-helper>Helper text that shows while it is pristine and valid</clr-control-helper>
+                        <clr-control-error>Error message that appears after focus is lost and control is invalid</clr-control-error>
+                    </clr-checkbox-wrapper>
+                </clr-checkbox-container>
+            </div>
+            <div *ngSwitchCase="'SELECT'">
+                <clr-select-container>
+                    <label>{{ field.label }}{{ field.required ? '*' : '' }}</label>
+                    <select clrSelect [formControlName]="field.key">
+                      <option *ngFor="let opt of castOptionsField(field).options.options" [value]="opt.value">{{ opt.display }}</option>
+                    </select>
+                    <clr-control-helper>Helper text that shows while it is pristine and valid</clr-control-helper>
+                    <clr-control-error>Error message that appears after focus is lost and control is invalid</clr-control-error>
+                  </clr-select-container>
+            </div>
+            <div *ngSwitchCase="'DATE'">
+                <clr-date-container>
+                    <label>{{ field.label }}{{ field.required ? '*' : '' }}</label>
+                    <input type="date" [formControlName]="field.key" [clrDate]="newDate()" >
+                    <clr-control-helper>Helper text that shows while it is pristine and valid</clr-control-helper>
+                    <clr-control-error>Error message that appears after focus is lost and control is invalid</clr-control-error>
+                </clr-date-container>
+            </div>
         </div>
     </div>
 </form>
+
+<button class="btn btn-primary" (click)="printValue()">Primary</button>
 
 
 <!-- <div *ngFor="let field of formDef.fields;">
@@ -48,7 +79,7 @@
         </div>
     </div>
 </div> -->
-<!-- 
+<!--
 key: string;
   label: string;
   placeholder?: string;
