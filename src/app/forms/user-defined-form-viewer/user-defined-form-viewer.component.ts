@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 
-interface FormFieldDefinitionBase<T> {
+export interface FormFieldDefinitionBase<T> {
   type: 'TEXT' | 'NUMBER' | 'CHECK' | 'RADIO' | 'TOGGLE' |'DATE' | 'AUTOCOMPLETE' /** Combo? */ | 'SELECT' | 'RANGE' | 'TEXTAREA';  // TODO could have phone and email options, or those could be validators. HTML might have input types of these...
   key: string;
   label: string;
@@ -56,7 +56,7 @@ interface MultiFormFieldDefinition {
 }
 
 
-type FormFieldDefinition = TextFormFieldDefinition | NumberFormFieldDefinition | BoolFormFieldDefinition | MultiFormFieldDefinition | DateFormFieldDefinition;
+export type FormFieldDefinition = TextFormFieldDefinition | NumberFormFieldDefinition | BoolFormFieldDefinition | MultiFormFieldDefinition | DateFormFieldDefinition;
 
 interface FormDefinition {
   key: string;
