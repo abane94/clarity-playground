@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { UserDefinedFormViewerComponent } from './user-defined-form-viewer/user-defined-form-viewer.component';
 import { FormsModule as ngFormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -16,7 +16,10 @@ import { FlexLayoutModule } from '@angular/flex-layout';
     ClarityModule,
     ngFormsModule,
     ReactiveFormsModule,
-    FlexLayoutModule
+    FlexLayoutModule,
+  ],
+  schemas: [
+    CUSTOM_ELEMENTS_SCHEMA // Tells Angular we will have custom tags in our templates
   ],
   exports: [UserDefinedFormViewerComponent, ListItemModalContainerComponent, MasterDetailControlComponent]
 })

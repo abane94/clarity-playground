@@ -3,14 +3,14 @@
         <form [formGroup]="form">
             <div class="array" *ngFor="let item of itemControls; let i = index;">
                 <app-list-item-modal-container>
-                    <div class="list-item" list-item  fxLayout="row" fxLayoutAlign="space-between center">
+                    <div class="list-item" list-item  fxLayout="row" fxLayoutAlign="space-between center" >
                         <div  fxLayout="column" fxLayoutAlign="space-between start">
                             <div class="key-display">{{ item.controls['key'].value }}{{ item.controls['required'].value ? '*' : '' }}</div>
                             <div class="type-display">{{ item.controls['type'].value }}</div>
                         </div>
                         <div class="icon">
                     </div>
-                        <clr-icon *ngIf="item.invalid" status="danger" size="lg" solid shape="error-standard"></clr-icon>
+                        <cds-icon *ngIf="item.invalid" status="danger" size="lg" solid shape="error-standard"></cds-icon>
                     </div>
                     <div modal-body [formGroup]="item">
                         <clr-select-container>
