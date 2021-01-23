@@ -1,0 +1,21 @@
+<!-- <p>list-item-modal-container works!</p> -->
+
+<div fxLayout="row" fxLayoutAlign="space-between center" style="border: solid black 1px;">
+    <div fxFlex>
+        <ng-content select="[list-item]"></ng-content>
+    </div>
+    <button type="button" (click)="isOpen = true" class="btn btn-icon" aria-label="home">
+        <clr-icon shape="pop-out"></clr-icon>
+    </button>
+</div>
+
+<clr-modal [(clrModalOpen)]="isOpen">
+    <h3 class="modal-title">I have a nice title</h3>
+    <div class="modal-body">
+        <ng-content select="[modal-body]"></ng-content>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-outline" (click)="isOpen = false">Cancel</button>
+        <button type="button" class="btn btn-primary" (click)="isOpen = false">Ok</button>
+    </div>
+</clr-modal>
