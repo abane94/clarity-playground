@@ -6,11 +6,12 @@ import { ClarityModule } from '@clr/angular';
 import { ListItemModalContainerComponent } from './list-item-modal-container/list-item-modal-container.component';
 import { MasterDetailControlComponent } from './master-detail-control/master-detail-control.component';
 import { FlexLayoutModule } from '@angular/flex-layout';
+import { MaterialEditorComponent } from './material-editor/material-editor.component';
 
 
 
 @NgModule({
-  declarations: [UserDefinedFormViewerComponent, ListItemModalContainerComponent, MasterDetailControlComponent],
+  declarations: [UserDefinedFormViewerComponent, ListItemModalContainerComponent, MasterDetailControlComponent, MaterialEditorComponent],
   imports: [
     CommonModule,
     ClarityModule,
@@ -21,6 +22,6 @@ import { FlexLayoutModule } from '@angular/flex-layout';
   schemas: [
     CUSTOM_ELEMENTS_SCHEMA // Tells Angular we will have custom tags in our templates
   ],
-  exports: [UserDefinedFormViewerComponent, ListItemModalContainerComponent, MasterDetailControlComponent]
+  exports: [UserDefinedFormViewerComponent, ListItemModalContainerComponent, MasterDetailControlComponent, MaterialEditorComponent]
 })
 export class FormsModule { }

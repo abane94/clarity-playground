@@ -1,0 +1,15 @@
+<div>
+    <form [formGroup]="form">
+        <clr-input-container>
+            <label>Name</label>
+            <input clrInput type="text" formControlName="name" />
+            <clr-control-helper>Helper text that shows while it is pristine and valid</clr-control-helper>
+            <clr-control-error>Error message that appears after focus is lost and control is invalid</clr-control-error>
+        </clr-input-container>
+
+        <app-master-detail-control formControlName="options"></app-master-detail-control>
+
+    </form>
+</div>
+
+<button (click)="print()">Print</button>
