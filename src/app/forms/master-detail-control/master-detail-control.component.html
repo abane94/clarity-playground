@@ -1,64 +1,78 @@
 <div>
     <div style="height:200px; width:300px;overflow-y: scroll;">
         <form [formGroup]="form">
-            <div class="array" *ngFor="let item of itemControls; let i = index;">
-                <app-list-item-modal-container>
-                    <div class="list-item" list-item  fxLayout="row" fxLayoutAlign="space-between center" >
-                        <div  fxLayout="column" fxLayoutAlign="space-between start">
-                            <div class="key-display">{{ item.controls['key'].value }}{{ item.controls['required'].value ? '*' : '' }}</div>
-                            <div class="type-display">{{ item.controls['type'].value }}</div>
+            <div formArrayName="items">
+                <div class="array" *ngFor="let item of itemsArray.controls; let i = index;">
+                    <app-list-item-modal-container>
+                        <div class="list-item" list-item  fxLayout="row" fxLayoutAlign="space-between center" >
+                            <div  fxLayout="column" fxLayoutAlign="space-between start">
+                                <!-- {{item.value | json }} -->
+                                <!-- <div class="key-display">{{ item.get('key')?.value }}{{ item.get('required')?.value ? '*' : '' }}</div>
+                                <div class="type-display">{{ item.get('type')?.value }}</div> -->
+                                <div class="key-display">{{ item.value.key }}{{ item.value.required ? '*' : '' }}</div>
+                                <div class="type-display">{{ item.value.type }}</div>
+                            </div>
+                            <div class="icon">
+                            </div>
+                            <!-- <cds-icon *ngIf="!item.valid" status="danger" size="lg" solid shape="error-standard"></cds-icon> -->
+                            <!-- <a *ngIf="!item.valid" href="javascript:void(0)" role="tooltip" aria-haspopup="true" class="tooltip tooltip-md">
+                                <cds-icon *ngIf="!item.valid" status="danger" size="lg" solid shape="error-standard"></cds-icon>
+                                <span class="tooltip-content">{{ item.valid }} - {{ item.invalid }} - {{ item.errors }}</span>
+                            </a> -->
+                            <clr-tooltip>
+                                <cds-icon *ngIf="!item.valid" status="danger" size="lg" solid shape="error-standard" clrTooltipTrigger (click)="alertErrors(item)"></cds-icon>
+                                <span class="tooltip-content">{{ item.valid }} - {{ item.invalid }} - {{ item.errors }}</span>
+                            </clr-tooltip>
                         </div>
-                        <div class="icon">
-                    </div>
-                        <cds-icon *ngIf="item.invalid" status="danger" size="lg" solid shape="error-standard"></cds-icon>
-                    </div>
-                    <div modal-body [formGroup]="item">
-                        <clr-select-container>
-                            <label>Field Type</label>
-                            <select clrSelect formGroupName="type">
-                              <option [value]="'TEXT'">TEXT</option>
-                              <option [value]="'NUMBER'">NUMBER</option>
-                              <option [value]="'CHECK'">CHECK</option>
-                              <!-- <option value="RADIO">RADIO</option> -->
-                              <!-- <option value="TOGGLE">TOGGLE</option> -->
-                              <option [value]="'DATE'">DATE</option>
-                              <option [value]="'SELECT'">SELECT</option>
-                            </select>
-                            <clr-control-helper>Helper text that shows while it is pristine and valid</clr-control-helper>
-                            <clr-control-error>Error message that appears after focus is lost and control is invalid</clr-control-error>
-                        </clr-select-container>
-
-                        <clr-input-container>
-                            <label>Field Key*</label>
-                            <input clrInput type="text" formControlName="key" />
-                            <clr-control-helper>Helper text that shows while it is pristine and valid</clr-control-helper>
-                            <clr-control-error>Error message that appears after focus is lost and control is invalid</clr-control-error>
-                        </clr-input-container>
-
-                        <clr-input-container>
-                            <label>Field Label*</label>
-                            <input clrInput type="text" formControlName="label" />
-                            <clr-control-helper>Helper text that shows while it is pristine and valid</clr-control-helper>
-                            <clr-control-error>Error message that appears after focus is lost and control is invalid</clr-control-error>
-                        </clr-input-container>
-
-                        <clr-input-container>
-                            <label>Field Placeholder</label>
-                            <input clrInput type="text" formControlName="placeholder" />
-                            <clr-control-helper>Helper text that shows while it is pristine and valid</clr-control-helper>
-                            <clr-control-error>Error message that appears after focus is lost and control is invalid</clr-control-error>
-                        </clr-input-container>
-
-                        <clr-checkbox-container>
-                            <clr-checkbox-wrapper>
-                                <label>Field Required?</label>
-                                <input clrCheckbox type="checkbox" formControlName="required"/>
+                        <!-- <div modal-body [formGroup]="item"> -->
+                        <div modal-body>
+                            <!-- <clr-select-container>
+                                <label>Field Type</label>
+                                <select clrSelect formGroupName="type">
+                                <option [value]="'TEXT'">TEXT</option>
+                                <option [value]="'NUMBER'">NUMBER</option>
+                                <option [value]="'CHECK'">CHECK</option>
+                                <option [value]="'DATE'">DATE</option>
+                                <option [value]="'SELECT'">SELECT</option>
+                                </select>
                                 <clr-control-helper>Helper text that shows while it is pristine and valid</clr-control-helper>
                                 <clr-control-error>Error message that appears after focus is lost and control is invalid</clr-control-error>
-                            </clr-checkbox-wrapper>
-                        </clr-checkbox-container>
-                    </div>
-                </app-list-item-modal-container>
+                            </clr-select-container>
+
+                            <clr-input-container>
+                                <label>Field Key*</label>
+                                <input clrInput type="text" formControlName="key" />
+                                <clr-control-helper>Helper text that shows while it is pristine and valid</clr-control-helper>
+                                <clr-control-error>Error message that appears after focus is lost and control is invalid</clr-control-error>
+                            </clr-input-container>
+
+                            <clr-input-container>
+                                <label>Field Label*</label>
+                                <input clrInput type="text" formControlName="label" />
+                                <clr-control-helper>Helper text that shows while it is pristine and valid</clr-control-helper>
+                                <clr-control-error>Error message that appears after focus is lost and control is invalid</clr-control-error>
+                            </clr-input-container>
+
+                            <clr-input-container>
+                                <label>Field Placeholder</label>
+                                <input clrInput type="text" formControlName="placeholder" />
+                                <clr-control-helper>Helper text that shows while it is pristine and valid</clr-control-helper>
+                                <clr-control-error>Error message that appears after focus is lost and control is invalid</clr-control-error>
+                            </clr-input-container>
+
+                            <clr-checkbox-container>
+                                <clr-checkbox-wrapper>
+                                    <label>Field Required?</label>
+                                    <input clrCheckbox type="checkbox" formControlName="required"/>
+                                    <clr-control-helper>Helper text that shows while it is pristine and valid</clr-control-helper>
+                                    <clr-control-error>Error message that appears after focus is lost and control is invalid</clr-control-error>
+                                </clr-checkbox-wrapper>
+                            </clr-checkbox-container> -->
+                            <!-- <app-user-defined-form-viewer *ngIf="innerForm" [formDef]="innerForm" [formGroup]="item"></app-user-defined-form-viewer> -->
+                            <app-user-defined-form-viewer *ngIf="innerForm" [formDef]="innerForm" [formControlName]="i"></app-user-defined-form-viewer>
+                        </div>
+                    </app-list-item-modal-container>
+                </div>
             </div>
         </form>
     </div>

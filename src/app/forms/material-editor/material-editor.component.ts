@@ -15,7 +15,7 @@ export class MaterialEditorComponent implements OnInit {
   constructor(private fb: FormBuilder) {
     this.form = fb.group({
       name: '',
-      options: [[{"type":"TEXT","key":"","label":"","placeholder":"","default":"","required":false}]]
+      options: [[{"type":"TEXT","key":"","label":"","placeholder":"","required":false}]]
     });
   }
   ngOnInit(): void {

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { AbstractControl, FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { GenericControlProvider, GenericControlValueAccessor } from '../GenericControlValueAccessor';
 import { FormFieldDefinition, FormFieldDefinitionBase } from '../user-defined-form-viewer/user-defined-form-viewer.component';
 
@@ -16,6 +16,80 @@ export class MasterDetailControlComponent extends GenericControlValueAccessor<an
   // ];
   form: FormGroup;
   itemsArray: FormArray;
+
+  innerForm: {key: string, fields: FormFieldDefinition[]} = {
+    key: 'MyForm',
+    fields: [
+      {
+        type: 'SELECT',
+        key: 'type',
+        label: 'Field Type',
+        multiple: false,
+        // default,
+        options: {
+          type: 'PLAINTEXT',  // TODO: other could be possible, like loading from db somehow
+          options: [
+            {
+              value: 'TEXT',
+              display: 'TEXT',
+              default: true,
+            },
+            {
+              value: 'NUMBER',
+              display: 'NUMBER',
+            },
+            {
+              value: 'CHECK',
+              display: 'CHECK',
+            },
+            // {
+            //   value: 'DATE',
+            //   display: 'DATE',
+            // },
+            {
+              value: 'SELECT',
+              display: 'SELECT',
+            }
+          ]
+        },
+        required: true
+      },
+      {
+        type: 'TEXT',
+        key: 'key',
+        label: 'Field Key',
+        placeholder: 'Field Key',
+        required: true
+      },
+      {
+        type: 'TEXT',
+        key: 'label',
+        label: 'Field Label',
+        placeholder: 'Field Label',
+        required: true
+      },
+      {
+        type: 'TEXT',
+        key: 'placeholder',
+        label: 'Placeholder',
+        placeholder: 'Placeholder',
+        required: true
+      },
+      {
+        type: 'CHECK',
+        key: 'required',
+        label: 'Required',
+        default: false
+      },
+      // {
+      //   key: "test",
+      //   label: "Test",
+      //   placeholder: "Enter Test here",
+      //   required: true,
+      //   type: "TEXT"
+      // }
+    ]
+  };
 
   i: FormFieldDefinition[] = [];
   constructor(private fb: FormBuilder) {
@@ -65,21 +139,14 @@ export class MasterDetailControlComponent extends GenericControlValueAccessor<an
   }
 
   createItem() {
-    // this.i.push({
-    //   type: 'TEXT',
-    //   key: '',
-    //   label: '',
-    //   placeholder: '',
-    //   default: '',
-    //   required: false,
-    // })
 
-    return this.fb.group({
+    return this.fb.control({
       type: 'TEXT',
-      key: ['', Validators.required],
-      label: ['', Validators.required],
+      // key: ['', Validators.required],  // validators cannot be set here, because this is a single control not a group, and it needs to be that way
+      // label: ['', Validators.required],
+      key: '',
+      label: '',
       placeholder: '',
-      default: '',
       required: false,
     });
   }
@@ -90,6 +157,21 @@ export class MasterDetailControlComponent extends GenericControlValueAccessor<an
 
   add() {
     this.itemsArray.push(this.createItem());
+  }
+
+  alertErrors(item: AbstractControl) {
+    const invalid: Record<string, any> = {};
+    const controls = (item as FormGroup).controls;
+    if (controls) {
+      for (const name in controls) {
+          if (controls[name].invalid) {
+              invalid[name] = controls[name].errors;
+          }
+      }
+    }
+
+    alert(`${item.valid} - ${item.invalid} - ${item.errors} - ${JSON.stringify(invalid, undefined, 2)}`);
+
   }
 
 }
