@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { AbstractControl, FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { AbstractControl, FormArray, FormBuilder, FormGroup, ValidatorFn, Validators } from '@angular/forms';
 import { GenericControlProvider, GenericControlValueAccessor } from '../GenericControlValueAccessor';
 import { FormFieldDefinition, FormFieldDefinitionBase } from '../user-defined-form-viewer/user-defined-form-viewer.component';
 
@@ -139,6 +139,10 @@ export class MasterDetailControlComponent extends GenericControlValueAccessor<an
   }
 
   createItem() {
+    const controlObj: Record<string,any> = {};
+    for (const fieldDef of this.innerForm.fields) {
+      controlObj[fieldDef.key] = '';   // TODO: find away to get the initial value from the data some how   (this.form.controls.items as FormArray).value ...
+    }
 
     return this.fb.control({
       type: 'TEXT',
@@ -148,8 +152,28 @@ export class MasterDetailControlComponent extends GenericControlValueAccessor<an
       label: '',
       placeholder: '',
       required: false,
-    });
+    }, [this.createValidator('key')]);
   }
+
+  createRequiredValidator(v: any, fieldDef: FormFieldDefinition) {
+    return () => {
+      if (!v && fieldDef.type === 'CHECK') {
+        return {required: fieldDef.label + ' is Required'}
+      }
+      return null
+    }
+  }
+
+  createValidator(subfield: string): ValidatorFn {
+    return (control: AbstractControl): { [key: string]: any } | null => {
+      if (typeof control?.value === 'object' && control.value.hasOwnProperty(subfield)) {
+          const subValue = control.value[subfield];
+          return (subValue && typeof subValue === 'string' && subValue.toLowerCase() === 'blue')
+            ? null : {[`${subfield}>wrongColor`]: subValue};
+      }
+      return { [`${subfield}>ValidatorError`]: 'No Field. This is an error in the code of the input validator.'}
+    }
+}
 
   print() {
     console.log(JSON.stringify(this.form.value))
@@ -170,7 +194,7 @@ export class MasterDetailControlComponent extends GenericControlValueAccessor<an
       }
     }
 
-    alert(`${item.valid} - ${item.invalid} - ${item.errors} - ${JSON.stringify(invalid, undefined, 2)}`);
+    alert(`${item.valid} - ${item.invalid} - ${JSON.stringify(item.errors)} - ${JSON.stringify(invalid, undefined, 2)}`);
 
   }
 
