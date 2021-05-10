@@ -132,103 +132,104 @@ export class UserDefinedFormViewerComponent extends GenericControlValueAccessor<
   // };
 
   @Input()
-  public formDef: FormDefinition = {
-    key: 'MyForm',
-    fields: [
-      {
-        type: 'SELECT',
-        key: 'type',
-        label: 'Field Type',
-        multiple: false,
-        // default,
-        options: {
-          type: 'PLAINTEXT',  // TODO: other could be possible, like loading from db somehow
-          options: [
-            {
-              value: 'TEXT',
-              display: 'TEXT',
-              default: true,
-            },
-            {
-              value: 'NUMBER',
-              display: 'NUMBER',
-            },
-            {
-              value: 'CHECK',
-              display: 'CHECK',
-            },
-            // {
-            //   value: 'DATE',
-            //   display: 'DATE',
-            // },
-            {
-              value: 'SELECT',
-              display: 'SELECT',
-            }
-          ]
-        },
-        required: true
-      },
-      {
-        type: 'TEXT',
-        key: 'key',
-        label: 'Field Key',
-        placeholder: 'Field Key',
-        required: true
-      },
-      {
-        type: 'TEXT',
-        key: 'label',
-        label: 'Field Label',
-        placeholder: 'Field Label',
-        required: true
-      },
-      {
-        type: 'TEXT',
-        key: 'placeholder',
-        label: 'Placeholder',
-        placeholder: 'Placeholder',
-        required: true
-      },
-      {
-        type: 'CHECK',
-        key: 'required',
-        label: 'Required',
-        default: false
-      },
-      // {
-      //   key: "test",
-      //   label: "Test",
-      //   placeholder: "Enter Test here",
-      //   required: true,
-      //   type: "TEXT"
-      // }
-      // {
-      //   type: 'SELECT',
-      //   key: 'language',
-      //   label: 'What language do you program in?',
-      //   multiple: false,
-      //   options: {
-      //     type: 'PLAINTEXT',
-      //     options: [{
-      //       display: 'Java',
-      //       value: 'java'
-      //     },{
-      //       display: 'c++',
-      //       value: 'cpp'
-      //     },{
-      //       display: 'Typescript',
-      //       value: 'ts'
-      //     }]
-      //   }
-      // },
-      // {
-      //   type: 'DATE',
-      //   key: 'start',
-      //   label: 'When did you start coding?',
-      // }
-    ]
-  };
+  public formDef?: FormDefinition;
+  // = {
+  //   key: 'MyForm',
+  //   fields: [
+  //     {
+  //       type: 'SELECT',
+  //       key: 'type',
+  //       label: 'Field Type',
+  //       multiple: false,
+  //       // default,
+  //       options: {
+  //         type: 'PLAINTEXT',  // TODO: other could be possible, like loading from db somehow
+  //         options: [
+  //           {
+  //             value: 'TEXT',
+  //             display: 'TEXT',
+  //             default: true,
+  //           },
+  //           {
+  //             value: 'NUMBER',
+  //             display: 'NUMBER',
+  //           },
+  //           {
+  //             value: 'CHECK',
+  //             display: 'CHECK',
+  //           },
+  //           // {
+  //           //   value: 'DATE',
+  //           //   display: 'DATE',
+  //           // },
+  //           {
+  //             value: 'SELECT',
+  //             display: 'SELECT',
+  //           }
+  //         ]
+  //       },
+  //       required: true
+  //     },
+  //     {
+  //       type: 'TEXT',
+  //       key: 'key',
+  //       label: 'Field Key',
+  //       placeholder: 'Field Key',
+  //       required: true
+  //     },
+  //     {
+  //       type: 'TEXT',
+  //       key: 'label',
+  //       label: 'Field Label',
+  //       placeholder: 'Field Label',
+  //       required: true
+  //     },
+  //     {
+  //       type: 'TEXT',
+  //       key: 'placeholder',
+  //       label: 'Placeholder',
+  //       placeholder: 'Placeholder',
+  //       required: true
+  //     },
+  //     {
+  //       type: 'CHECK',
+  //       key: 'required',
+  //       label: 'Required',
+  //       default: false
+  //     },
+  //     // {
+  //     //   key: "test",
+  //     //   label: "Test",
+  //     //   placeholder: "Enter Test here",
+  //     //   required: true,
+  //     //   type: "TEXT"
+  //     // }
+  //     // {
+  //     //   type: 'SELECT',
+  //     //   key: 'language',
+  //     //   label: 'What language do you program in?',
+  //     //   multiple: false,
+  //     //   options: {
+  //     //     type: 'PLAINTEXT',
+  //     //     options: [{
+  //     //       display: 'Java',
+  //     //       value: 'java'
+  //     //     },{
+  //     //       display: 'c++',
+  //     //       value: 'cpp'
+  //     //     },{
+  //     //       display: 'Typescript',
+  //     //       value: 'ts'
+  //     //     }]
+  //     //   }
+  //     // },
+  //     // {
+  //     //   type: 'DATE',
+  //     //   key: 'start',
+  //     //   label: 'When did you start coding?',
+  //     // }
+  //   ]
+  // };
 
   newDate = () => new Date()
 
@@ -260,7 +261,6 @@ export class UserDefinedFormViewerComponent extends GenericControlValueAccessor<
   constructor(private fb: FormBuilder) {
     super();
     console.log('constructor');
-    this.buildForm();
   }
 
   _setDisabledState(isDisabled: boolean): void {
@@ -269,10 +269,15 @@ export class UserDefinedFormViewerComponent extends GenericControlValueAccessor<
 
   ngOnInit(): void {
 
+    this.buildForm();
   }
 
   private buildForm() {
     const formObj: { [fieldKey: string]: any[]} = {}
+    if (!this.formDef) {
+      console.error('Form Def does not exist!!!');
+      return;
+    }
     for (const fieldDef of this.formDef.fields) {
       switch(fieldDef.type) {
         case 'TEXT':
