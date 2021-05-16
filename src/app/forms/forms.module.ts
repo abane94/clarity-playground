@@ -4,7 +4,7 @@ import { UserDefinedFormViewerComponent } from './user-defined-form-viewer/user-
 import { FormsModule as ngFormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ClarityModule } from '@clr/angular';
 import { ListItemModalContainerComponent } from './list-item-modal-container/list-item-modal-container.component';
-import { MasterDetailControlComponent } from './master-detail-control/master-detail-control.component';
+import { MasterDetailControlComponent } from './master-detail-control/master-detail-control-v2.component';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { MaterialEditorComponent } from './material-editor/material-editor.component';
 

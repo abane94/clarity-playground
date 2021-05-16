@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { GenericControlProvider, GenericControlValueAccessor } from '../GenericControlValueAccessor';
+import { GenericControlProvider, GenericControlValueAccessor, GenericControlValueAccessorV2 } from '../GenericControlValueAccessor';
 
 /**
  * TODO:
@@ -11,7 +11,7 @@ import { GenericControlProvider, GenericControlValueAccessor } from '../GenericC
 
 
 export interface FormFieldDefinitionBase<T> {
-  type: 'TEXT' | 'NUMBER' | 'CHECK' | 'RADIO' | 'TOGGLE' |'DATE' | 'AUTOCOMPLETE' /** Combo? */ | 'SELECT' | 'RANGE' | 'TEXTAREA';  // TODO could have phone and email options, or those could be validators. HTML might have input types of these...
+  type: 'TEXT' | 'NUMBER' | 'CHECK' | 'RADIO' | 'TOGGLE' |'DATE' | 'AUTOCOMPLETE' /** Combo? */ | 'SELECT' | 'RANGE' | 'TEXTAREA' | 'NESTED';  // TODO could have phone and email options, or those could be validators. HTML might have input types of these...
   key: string;
   label: string;
   placeholder?: string;
@@ -42,6 +42,11 @@ interface BoolFormFieldDefinition extends FormFieldDefinitionBase<boolean> {
   // TODO: Update: toggle might be for binary options that are not on/off / yes/no types of things
 }
 
+interface NestedFormFieldDefinition extends FormFieldDefinitionBase<any> {
+  type: 'NESTED',
+  innerForm: {key: string, fields: FormFieldDefinition[]};
+}
+
 interface OptionDefinition {
   value: string;
   display: string;
@@ -64,9 +69,9 @@ interface MultiFormFieldDefinition {
 }
 
 
-export type FormFieldDefinition = TextFormFieldDefinition | NumberFormFieldDefinition | BoolFormFieldDefinition | MultiFormFieldDefinition | DateFormFieldDefinition;
+export type FormFieldDefinition = TextFormFieldDefinition | NumberFormFieldDefinition | BoolFormFieldDefinition | MultiFormFieldDefinition | DateFormFieldDefinition | NestedFormFieldDefinition;
 
-interface FormDefinition {
+export interface FormDefinition {
   key: string;
   fields: FormFieldDefinition[];  // this should be a list with a key property instead of {key: FieldDef}, so that the ordering of the fields is consistent
 }
@@ -77,245 +82,122 @@ interface FormDefinition {
   styleUrls: ['./user-defined-form-viewer.component.scss'],
   providers: [GenericControlProvider(UserDefinedFormViewerComponent)]
 })
-export class UserDefinedFormViewerComponent extends GenericControlValueAccessor<any> implements OnInit {
-
-  // public formDef: FormDefinition = {
-  //   key: 'MyForm',
-  //   fields: [
-  //     {
-  //       type: 'TEXT',
-  //       key: 'name',
-  //       label: 'Name',
-  //       placeholder: 'Name',
-  //       // default
-  //       required: true
-  //     },
-  //     {
-  //       type: 'NUMBER',
-  //       key: 'age',
-  //       // allowDecimals: false,
-  //       label: 'Age',
-  //       // placeholder: 'Name',
-  //       // default
-  //       required: false
-  //     },
-  //     {
-  //       type: 'CHECK',
-  //       key: 'programer',
-  //       label: 'Are you a programmer?',
-  //       default: false
-  //     }, {
-  //       type: 'SELECT',
-  //       key: 'language',
-  //       label: 'What language do you program in?',
-  //       multiple: false,
-  //       options: {
-  //         type: 'PLAINTEXT',
-  //         options: [{
-  //           display: 'Java',
-  //           value: 'java'
-  //         },{
-  //           display: 'c++',
-  //           value: 'cpp'
-  //         },{
-  //           display: 'Typescript',
-  //           value: 'ts'
-  //         }]
-  //       }
-  //     },
-  //     {
-  //       type: 'DATE',
-  //       key: 'start',
-  //       label: 'When did you start coding?',
-  //     }
-  //   ]
-  // };
+export class UserDefinedFormViewerComponent extends GenericControlValueAccessorV2<any> implements OnInit {
 
   @Input()
-  public formDef?: FormDefinition;
-  // = {
-  //   key: 'MyForm',
-  //   fields: [
-  //     {
-  //       type: 'SELECT',
-  //       key: 'type',
-  //       label: 'Field Type',
-  //       multiple: false,
-  //       // default,
-  //       options: {
-  //         type: 'PLAINTEXT',  // TODO: other could be possible, like loading from db somehow
-  //         options: [
-  //           {
-  //             value: 'TEXT',
-  //             display: 'TEXT',
-  //             default: true,
-  //           },
-  //           {
-  //             value: 'NUMBER',
-  //             display: 'NUMBER',
-  //           },
-  //           {
-  //             value: 'CHECK',
-  //             display: 'CHECK',
-  //           },
-  //           // {
-  //           //   value: 'DATE',
-  //           //   display: 'DATE',
-  //           // },
-  //           {
-  //             value: 'SELECT',
-  //             display: 'SELECT',
-  //           }
-  //         ]
-  //       },
-  //       required: true
-  //     },
-  //     {
-  //       type: 'TEXT',
-  //       key: 'key',
-  //       label: 'Field Key',
-  //       placeholder: 'Field Key',
-  //       required: true
-  //     },
-  //     {
-  //       type: 'TEXT',
-  //       key: 'label',
-  //       label: 'Field Label',
-  //       placeholder: 'Field Label',
-  //       required: true
-  //     },
-  //     {
-  //       type: 'TEXT',
-  //       key: 'placeholder',
-  //       label: 'Placeholder',
-  //       placeholder: 'Placeholder',
-  //       required: true
-  //     },
-  //     {
-  //       type: 'CHECK',
-  //       key: 'required',
-  //       label: 'Required',
-  //       default: false
-  //     },
-  //     // {
-  //     //   key: "test",
-  //     //   label: "Test",
-  //     //   placeholder: "Enter Test here",
-  //     //   required: true,
-  //     //   type: "TEXT"
-  //     // }
-  //     // {
-  //     //   type: 'SELECT',
-  //     //   key: 'language',
-  //     //   label: 'What language do you program in?',
-  //     //   multiple: false,
-  //     //   options: {
-  //     //     type: 'PLAINTEXT',
-  //     //     options: [{
-  //     //       display: 'Java',
-  //     //       value: 'java'
-  //     //     },{
-  //     //       display: 'c++',
-  //     //       value: 'cpp'
-  //     //     },{
-  //     //       display: 'Typescript',
-  //     //       value: 'ts'
-  //     //     }]
-  //     //   }
-  //     // },
-  //     // {
-  //     //   type: 'DATE',
-  //     //   key: 'start',
-  //     //   label: 'When did you start coding?',
-  //     // }
-  //   ]
-  // };
+  public formDef!: FormDefinition;
 
   newDate = () => new Date()
 
-  public form: FormGroup | undefined;
+  // public form: FormGroup;
 
   get Errors() {
     const ret: Record<string, any> = {
-      form: this.form?.errors
+      form: this._form.errors
     };
-    for (const c of Object.keys(this.form?.controls || {})) {
-      ret[c] = this.form?.controls[c].errors;
+    for (const c of Object.keys(this._form.controls || {})) {
+      ret[c] = this._form.controls[c].errors;
     }
     return ret || '';
   }
 
   get value(): any {
-    return this.form?.value;
+    return this._form.value;
   }
   set value(v: any) {
     console.log(this);
-    this.form?.setValue(v);
+    this._form.setValue(v);
     console.log('After set');
   }
 
 
   // helper methods to cast the fields in the template
-  castOptionsField = (f: FormFieldDefinition) => (f as MultiFormFieldDefinition)
+  castOptionsField = (f: FormFieldDefinition) => (f as MultiFormFieldDefinition);
+  castNestedField = (f: FormFieldDefinition) => (f as NestedFormFieldDefinition);
 
-  constructor(private fb: FormBuilder) {
-    super();
-    console.log('constructor');
+  constructor(_fb: FormBuilder) {
+    super(_fb);
+    // console.log('constructor');
   }
 
-  _setDisabledState(isDisabled: boolean): void {
-    throw new Error('Method not implemented.');
-  }
+  // _setDisabledState(isDisabled: boolean): void {
+  //   throw new Error('Method not implemented.');
+  // }
 
-  ngOnInit(): void {
+  // ngOnInit(): void {
 
-    this.buildForm();
-  }
+  //   this.buildForm();
+  // }
 
-  private buildForm() {
-    const formObj: { [fieldKey: string]: any[]} = {}
-    if (!this.formDef) {
-      console.error('Form Def does not exist!!!');
-      return;
-    }
-    for (const fieldDef of this.formDef.fields) {
-      switch(fieldDef.type) {
-        case 'TEXT':
-          formObj[fieldDef.key] = [fieldDef.default || ''];
-          if (fieldDef.required) { formObj[fieldDef.key].push(Validators.required); }
-          break;
-        case 'NUMBER':
-          formObj[fieldDef.key] = [fieldDef.default || 0]
-          if (fieldDef.required) { formObj[fieldDef.key].push(Validators.required); }
-          break;
-        case 'CHECK':
-          formObj[fieldDef.key] = [fieldDef.default || false];
-          // if (fieldDef.required) { formObj[fieldDef.key].push(Validators.required); }  // TODO: I dont think 'required' makes sense for checkboxes
-          break;
-        case 'SELECT':
-          formObj[fieldDef.key] = [];
-          if (fieldDef.required) { formObj[fieldDef.key].push(Validators.required); }
-          break;
-        case 'DATE':
-          formObj[fieldDef.key] = [new Date()];
-          if (fieldDef.required) { formObj[fieldDef.key].push(Validators.required); }
-          break;
-        default:
-          console.log(`Field of type ${fieldDef.type} has not been implemented yet`);
-      }
-    }
-    this.form = this.fb.group(formObj);
+  // private buildForm() {
+  //   if (!this.formDef) {
+  //     console.error('Form Def does not exist!!!');
+  //     return;
+  //   }
+  //   const formObj = UserDefinedFormViewerComponent.buildFormObject(this.formDef);
+  //   this.form = this.fb.group(formObj);
 
-    this.form.valueChanges.subscribe(val => {
-      // console.log('Inner form changed');
-      if (this._changeHandler && this.form) {
-        this._changeHandler(this.form.value);
-      }
-    });
+  //   this.form.valueChanges.subscribe(val => {
+  //     // console.log('Inner form changed');
+  //     if (this._changeHandler && this.form) {
+  //       this._changeHandler(this.form.value);
+  //     }
+  //   });
+  // }
+
+  _createFormGroup() {
+    // TODO: this has to wait to be called until inputs are available
+
+    // this._form = this._fb.group({
+    //   conjunctor: null,
+    //   conditions: this._fb.array([]),
+    //   groups: this._fb.array([])
+    // });
+
+    const formObj = UserDefinedFormViewerComponent.buildFormObject(this.formDef);
+    this._form = this._fb.group(formObj);
+
+    // add one condition on the next tick, after the form creation   // ARIS: this is different and seems to be important to angular timing
+    // setTimeout(() => this.add());
   }
 
   printValue() {
-    console.log(this.form?.value);
+    console.log(this._form?.value);
+  }
+
+  static buildFormObject(innerForm: FormDefinition) {
+
+    const defaultItem: Record<string, any> = {};
+
+    for (const formDef of innerForm.fields) {
+        switch(formDef.type) {
+        case('TEXT'):
+        case('TEXTAREA'):
+            defaultItem[formDef.key] = formDef.default || '';
+            break;
+        case('NUMBER'):
+            defaultItem[formDef.key] = formDef.default || 0;
+            break;
+        case('CHECK'):
+        case('TOGGLE'):
+            defaultItem[formDef.key] = formDef.default || false;
+            break;
+        case('RADIO'):
+        case('AUTOCOMPLETE'):
+        case('SELECT'):
+            const val = formDef.options.options.find(o => o.default);
+            defaultItem[formDef.key] = val?.value || '';
+            break;
+        case('DATE'):
+            defaultItem[formDef.key] = formDef.default || new Date();
+            break;
+        case('NESTED'):
+            defaultItem[formDef.key] = formDef.default || UserDefinedFormViewerComponent.buildFormObject(formDef.innerForm);
+            break;
+        }
+    }
+
+      return defaultItem;
   }
 
 }

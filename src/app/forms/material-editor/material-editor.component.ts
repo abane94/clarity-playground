@@ -8,7 +8,7 @@ import { FormFieldDefinition } from '../user-defined-form-viewer/user-defined-fo
   styleUrls: ['./material-editor.component.scss']
 })
 export class MaterialEditorComponent implements OnInit {
-  public formDef?: {key: string, fields: FormFieldDefinition[]};
+  public formDef!: {key: string, fields: FormFieldDefinition[]};
   form: FormGroup;
   // itemsArray: FormArray;
 
@@ -62,7 +62,8 @@ export class MaterialEditorComponent implements OnInit {
           key: 'key',
           label: 'Field Key',
           placeholder: 'Field Key',
-          required: true
+          required: true,
+          default: 'My Field Key'
         },
         {
           type: 'TEXT',
@@ -84,6 +85,72 @@ export class MaterialEditorComponent implements OnInit {
           label: 'Required',
           default: false
         },
+        {
+          type: 'NESTED',
+          key: 'people',
+          label: 'People',
+          innerForm: {
+            key: 'MyInnerForm',
+            fields: [
+              {
+                type: 'SELECT',
+                key: 'color',
+                label: 'Favorite Color',
+                multiple: false,
+                options: {
+                  type: 'PLAINTEXT',
+                  options: [
+                    {
+                      value: 'Blue',
+                      display: 'Blue',
+                      default: true,
+                    },
+                    {
+                      value: 'RED',
+                      display: 'RED',
+                    },
+                    {
+                      value: 'Yellow',
+                      display: 'Yellow',
+                    },
+                    {
+                      value: 'Green',
+                      display: 'Green',
+                    }
+                  ]
+                },
+                required: true
+              },
+              {
+                type: 'TEXT',
+                key: 'firstName',
+                label: 'First Name',
+                placeholder: 'First Name',
+                required: true
+              },
+              {
+                type: 'TEXT',
+                key: 'lastName',
+                label: 'Last Name',
+                placeholder: 'Last Name',
+                required: true
+              },
+              {
+                type: 'TEXT',
+                key: 'nickName',
+                label: 'Nick Name',
+                placeholder: 'Nick Name',
+                required: true
+              },
+              {
+                type: 'CHECK',
+                key: 'required',
+                label: 'Are you cool',
+                default: false
+              }
+            ]
+          }
+        }
         // {
         //   key: "test",
         //   label: "Test",
