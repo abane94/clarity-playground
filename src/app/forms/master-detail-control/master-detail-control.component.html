@@ -9,8 +9,8 @@
                                 <!-- {{item.value | json }} -->
                                 <!-- <div class="key-display">{{ item.get('key')?.value }}{{ item.get('required')?.value ? '*' : '' }}</div>
                                 <div class="type-display">{{ item.get('type')?.value }}</div> -->
-                                <div class="key-display">{{ item.value.key }}{{ item.value.required ? '*' : '' }}</div>
-                                <div class="type-display">{{ item.value.type }}</div>
+                                <div class="key-display">{{ item?.value?.key || ' ' }}{{ item?.value?.required ? '*' : '' }}</div>
+                                <div class="type-display">{{ item?.value?.type || ' ' }}</div>
                             </div>
                             <div class="icon">
                             </div>

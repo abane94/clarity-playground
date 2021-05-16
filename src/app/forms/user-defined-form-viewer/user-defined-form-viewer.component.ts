@@ -11,7 +11,7 @@ import { GenericControlProvider, GenericControlValueAccessor, GenericControlValu
 
 
 export interface FormFieldDefinitionBase<T> {
-  type: 'TEXT' | 'NUMBER' | 'CHECK' | 'RADIO' | 'TOGGLE' |'DATE' | 'AUTOCOMPLETE' /** Combo? */ | 'SELECT' | 'RANGE' | 'TEXTAREA';  // TODO could have phone and email options, or those could be validators. HTML might have input types of these...
+  type: 'TEXT' | 'NUMBER' | 'CHECK' | 'RADIO' | 'TOGGLE' |'DATE' | 'AUTOCOMPLETE' /** Combo? */ | 'SELECT' | 'RANGE' | 'TEXTAREA' | 'NESTED';  // TODO could have phone and email options, or those could be validators. HTML might have input types of these...
   key: string;
   label: string;
   placeholder?: string;
@@ -42,6 +42,11 @@ interface BoolFormFieldDefinition extends FormFieldDefinitionBase<boolean> {
   // TODO: Update: toggle might be for binary options that are not on/off / yes/no types of things
 }
 
+interface NestedFormFieldDefinition extends FormFieldDefinitionBase<any> {
+  type: 'NESTED',
+  innerForm: {key: string, fields: FormFieldDefinition[]};
+}
+
 interface OptionDefinition {
   value: string;
   display: string;
@@ -64,7 +69,7 @@ interface MultiFormFieldDefinition {
 }
 
 
-export type FormFieldDefinition = TextFormFieldDefinition | NumberFormFieldDefinition | BoolFormFieldDefinition | MultiFormFieldDefinition | DateFormFieldDefinition;
+export type FormFieldDefinition = TextFormFieldDefinition | NumberFormFieldDefinition | BoolFormFieldDefinition | MultiFormFieldDefinition | DateFormFieldDefinition | NestedFormFieldDefinition;
 
 export interface FormDefinition {
   key: string;
@@ -107,7 +112,8 @@ export class UserDefinedFormViewerComponent extends GenericControlValueAccessorV
 
 
   // helper methods to cast the fields in the template
-  castOptionsField = (f: FormFieldDefinition) => (f as MultiFormFieldDefinition)
+  castOptionsField = (f: FormFieldDefinition) => (f as MultiFormFieldDefinition);
+  castNestedField = (f: FormFieldDefinition) => (f as NestedFormFieldDefinition);
 
   constructor(_fb: FormBuilder) {
     super(_fb);
@@ -159,36 +165,39 @@ export class UserDefinedFormViewerComponent extends GenericControlValueAccessorV
     console.log(this._form?.value);
   }
 
-  public static buildFormObject(formDef: FormDefinition) {  // TODO: take a value input object and use that before default
-    const formObj: { [fieldKey: string]: any[]} = {}
-    for (const fieldDef of formDef.fields) {
-      switch(fieldDef.type) {
-        case 'TEXT':
-          formObj[fieldDef.key] = [fieldDef.default || ''];
-          // if (fieldDef.required) { formObj[fieldDef.key].push(Validators.required); }
-          break;
-        case 'NUMBER':
-          formObj[fieldDef.key] = [fieldDef.default || 0]
-          // if (fieldDef.required) { formObj[fieldDef.key].push(Validators.required); }
-          break;
-        case 'CHECK':
-          formObj[fieldDef.key] = [fieldDef.default || false];
-          // if (fieldDef.required) { formObj[fieldDef.key].push(Validators.required); }  // TODO: I dont think 'required' makes sense for checkboxes
-          break;
-        case 'SELECT':
-          formObj[fieldDef.key] = [];
-          // if (fieldDef.required) { formObj[fieldDef.key].push(Validators.required); }
-          break;
-        case 'DATE':
-          formObj[fieldDef.key] = [new Date()];
-          // if (fieldDef.required) { formObj[fieldDef.key].push(Validators.required); }
-          break;
-        default:
-          console.log(`Field of type ${fieldDef.type} has not been implemented yet`);
-      }
+  static buildFormObject(innerForm: FormDefinition) {
+
+    const defaultItem: Record<string, any> = {};
+
+    for (const formDef of innerForm.fields) {
+        switch(formDef.type) {
+        case('TEXT'):
+        case('TEXTAREA'):
+            defaultItem[formDef.key] = formDef.default || '';
+            break;
+        case('NUMBER'):
+            defaultItem[formDef.key] = formDef.default || 0;
+            break;
+        case('CHECK'):
+        case('TOGGLE'):
+            defaultItem[formDef.key] = formDef.default || false;
+            break;
+        case('RADIO'):
+        case('AUTOCOMPLETE'):
+        case('SELECT'):
+            const val = formDef.options.options.find(o => o.default);
+            defaultItem[formDef.key] = val?.value || '';
+            break;
+        case('DATE'):
+            defaultItem[formDef.key] = formDef.default || new Date();
+            break;
+        case('NESTED'):
+            defaultItem[formDef.key] = formDef.default || UserDefinedFormViewerComponent.buildFormObject(formDef.innerForm);
+            break;
+        }
     }
 
-    return formObj;
+      return defaultItem;
   }
 
 }

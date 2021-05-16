@@ -52,6 +52,13 @@
                     <clr-control-error>Error message that appears after focus is lost and control is invalid</clr-control-error>
                 </clr-date-container>
             </div>
+            <div *ngSwitchCase="'NESTED'">
+                <label>{{ field.label }}{{ field.required ? '*' : '' }}</label>
+                <app-master-detail-control [formControlName]="field.key" [innerForm]="castNestedField(field).innerForm"></app-master-detail-control>
+
+                <clr-control-helper>Helper text that shows while it is pristine and valid</clr-control-helper>
+                <clr-control-error>Error message that appears after focus is lost and control is invalid</clr-control-error>
+            </div>
         </div>
     </div>
 </form>
