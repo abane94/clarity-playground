@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { GenericControlProvider, GenericControlValueAccessor, GenericControlValueAccessorV2 } from '../GenericControlValueAccessor';
+import { GenericControlProvider, GenericControlValueAccessor } from '../GenericControlValueAccessor';
 
 /**
  * TODO:
@@ -82,7 +82,7 @@ export interface FormDefinition {
   styleUrls: ['./user-defined-form-viewer.component.scss'],
   providers: [GenericControlProvider(UserDefinedFormViewerComponent)]
 })
-export class UserDefinedFormViewerComponent extends GenericControlValueAccessorV2<any> implements OnInit {
+export class UserDefinedFormViewerComponent extends GenericControlValueAccessor<any> implements OnInit {
 
   @Input()
   public formDef!: FormDefinition;
