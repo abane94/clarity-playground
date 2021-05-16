@@ -8,7 +8,7 @@ import { FormFieldDefinition } from '../user-defined-form-viewer/user-defined-fo
   styleUrls: ['./material-editor.component.scss']
 })
 export class MaterialEditorComponent implements OnInit {
-  public formDef?: {key: string, fields: FormFieldDefinition[]};
+  public formDef!: {key: string, fields: FormFieldDefinition[]};
   form: FormGroup;
   // itemsArray: FormArray;
 

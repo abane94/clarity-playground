@@ -1,6 +1,6 @@
 <div>
     <div style="height:200px; width:300px;overflow-y: scroll;">
-        <form *ngIf="form && itemsArray" [formGroup]="form">
+        <form *ngIf="_form && itemsArray" [formGroup]="_form">
             <div formArrayName="items">
                 <div class="array" *ngFor="let item of itemsArray.controls; let i = index;">
                     <app-list-item-modal-container>

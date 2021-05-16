@@ -2,7 +2,7 @@
 
 <!-- form header information and wrappers etc...-->
 
-<form *ngIf="form && formDef" clrForm [formGroup]="form" class="clr-form clr-form-horizontal"> <!-- TODO: conditional logic to determin layout-->
+<form *ngIf="_form && formDef" clrForm [formGroup]="_form" class="clr-form clr-form-horizontal"> <!-- TODO: conditional logic to determin layout-->
     <div *ngFor="let field of formDef.fields;">
         <div [ngSwitch]="field.type">
             <div *ngSwitchCase="'TEXT'">
