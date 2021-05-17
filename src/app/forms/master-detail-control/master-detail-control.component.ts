@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, ContentChild, ContentChildren, Input, OnInit, QueryList, TemplateRef } from '@angular/core';
 import { AbstractControl, FormArray, FormBuilder, FormGroup, ValidatorFn, Validators } from '@angular/forms';
 import { GenericControlProvider, GenericControlValueAccessor } from '../GenericControlValueAccessor';
 import { FormDefinition, FormFieldDefinition, FormFieldDefinitionBase, UserDefinedFormViewerComponent } from '../user-defined-form-viewer/user-defined-form-viewer.component';
@@ -15,6 +15,8 @@ export class MasterDetailControlComponent extends GenericControlValueAccessor<an
   //   'what is you age?'
   // ];
   // form: FormGroup;
+  @ContentChild(TemplateRef) templateRef!: TemplateRef<any>;
+
   itemsArray: FormArray;
 
   @Input()
@@ -150,6 +152,10 @@ export class MasterDetailControlComponent extends GenericControlValueAccessor<an
 
     alert(`${item.valid} - ${item.invalid} - ${JSON.stringify(item.errors)} - ${JSON.stringify(invalid, undefined, 2)}`);
 
+  }
+
+  objectKeys(o: object) {
+    return Object.keys(o || {});
   }
 
 }

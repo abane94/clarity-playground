@@ -4,26 +4,39 @@
             <div formArrayName="items">
                 <div class="array" *ngFor="let item of itemsArray.controls; let i = index;">
                     <app-list-item-modal-container>
-                        <div class="list-item" list-item  fxLayout="row" fxLayoutAlign="space-between center" >
+                        <!-- <div class="list-item" list-item  fxLayout="row" fxLayoutAlign="space-between center" >
                             <div  fxLayout="column" fxLayoutAlign="space-between start">
-                                <!-- {{item.value | json }} -->
-                                <!-- <div class="key-display">{{ item.get('key')?.value }}{{ item.get('required')?.value ? '*' : '' }}</div>
-                                <div class="type-display">{{ item.get('type')?.value }}</div> -->
                                 <div class="key-display">{{ item?.value?.key || ' ' }}{{ item?.value?.required ? '*' : '' }}</div>
                                 <div class="type-display">{{ item?.value?.type || ' ' }}</div>
                             </div>
                             <div class="icon">
                             </div>
-                            <!-- <cds-icon *ngIf="!item.valid" status="danger" size="lg" solid shape="error-standard"></cds-icon> -->
-                            <!-- <a *ngIf="!item.valid" href="javascript:void(0)" role="tooltip" aria-haspopup="true" class="tooltip tooltip-md">
-                                <cds-icon *ngIf="!item.valid" status="danger" size="lg" solid shape="error-standard"></cds-icon>
-                                <span class="tooltip-content">{{ item.valid }} - {{ item.invalid }} - {{ item.errors }}</span>
-                            </a> -->
                             <clr-tooltip>
                                 <cds-icon *ngIf="!item.valid" status="danger" size="lg" solid shape="error-standard" clrTooltipTrigger (click)="alertErrors(item)"></cds-icon>
                                 <span class="tooltip-content">{{ item.valid }} - {{ item.invalid }} - {{ item.errors }}</span>
                             </clr-tooltip>
+                        </div> -->
+                        <div class="list-item" list-item  fxLayout="row" fxLayoutAlign="space-between center" >
+
+                            <ng-template *ngIf="templateRef"
+                                [ngTemplateOutlet]="templateRef"
+                                [ngTemplateOutletContext]="{ $implicit: item }"
+                            >
+                            </ng-template>
+                            <ng-container *ngIf="!templateRef">
+                                <div  fxLayout="column" fxLayoutAlign="space-between start">
+                                    <div class="key-display">{{ item?.value[objectKeys(item?.value)[0]] || ' ' }}</div>
+                                    <div class="type-display">{{ item?.value[objectKeys(item?.value)[1]] || ' ' }}</div>
+                                </div>
+                                <div class="icon">
+                                </div>
+                                <clr-tooltip>
+                                    <cds-icon *ngIf="!item.valid" status="danger" size="lg" solid shape="error-standard" clrTooltipTrigger (click)="alertErrors(item)"></cds-icon>
+                                    <span class="tooltip-content">{{ item.valid }} - {{ item.invalid }} - {{ item.errors }}</span>
+                                </clr-tooltip>
+                            </ng-container>
                         </div>
+
                         <!-- <div modal-body [formGroup]="item"> -->
                         <div modal-body>
                             <!-- <clr-select-container>

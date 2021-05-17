@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormGroup } from '@angular/forms';
 import { FormFieldDefinition } from '../user-defined-form-viewer/user-defined-form-viewer.component';
 
 @Component({
@@ -147,6 +147,59 @@ export class MaterialEditorComponent implements OnInit {
                 key: 'required',
                 label: 'Are you cool',
                 default: false
+              },
+              {
+                type: 'NESTED',
+                key: 'friends',
+                label: 'Friends',
+                innerForm: {
+                  key: 'MyFirends',
+                  fields: [
+                    {
+                      type: 'TEXT',
+                      key: 'firstName',
+                      label: 'First Name',
+                      placeholder: 'First Name',
+                      required: true
+                    },
+                    {
+                      type: 'TEXT',
+                      key: 'lastName',
+                      label: 'Last Name',
+                      placeholder: 'Last Name',
+                      required: true
+                    },
+                    {
+                      type: 'SELECT',
+                      key: 'color',
+                      label: 'Favorite Color',
+                      multiple: false,
+                      options: {
+                        type: 'PLAINTEXT',
+                        options: [
+                          {
+                            value: 'Blue',
+                            display: 'Blue',
+                            default: true,
+                          },
+                          {
+                            value: 'RED',
+                            display: 'RED',
+                          },
+                          {
+                            value: 'Yellow',
+                            display: 'Yellow',
+                          },
+                          {
+                            value: 'Green',
+                            display: 'Green',
+                          }
+                        ]
+                      },
+                      required: true
+                    }
+                  ]
+                }
               }
             ]
           }
@@ -181,5 +234,20 @@ export class MaterialEditorComponent implements OnInit {
   // add() {
   //   this.itemsArray.push(this.createItem());
   // }
+
+  alertErrors(item: AbstractControl) {
+    const invalid: Record<string, any> = {};
+    const controls = (item as FormGroup).controls;
+    if (controls) {
+      for (const name in controls) {
+          if (controls[name].invalid) {
+              invalid[name] = controls[name].errors;
+          }
+      }
+    }
+
+    alert(`${item.valid} - ${item.invalid} - ${JSON.stringify(item.errors)} - ${JSON.stringify(invalid, undefined, 2)}`);
+
+  }
 
 }

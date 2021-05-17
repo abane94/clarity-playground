@@ -7,7 +7,23 @@
             <clr-control-error>Error message that appears after focus is lost and control is invalid</clr-control-error>
         </clr-input-container>
 
-        <app-master-detail-control formControlName="options" [innerForm]="formDef"></app-master-detail-control>
+        <app-master-detail-control formControlName="options" [innerForm]="formDef">
+            <ng-template let-item #myTag>
+                <!-- <div class="list-item" list-item  fxLayout="row" fxLayoutAlign="space-between center" > -->
+                    <div  fxLayout="column" fxLayoutAlign="space-between start">
+                        <div class="key-display">{{ item?.value?.key || ' ' }}{{ item?.value?.required ? '*' : '' }}</div>
+                        <div class="type-display">{{ item?.value?.type || ' ' }}</div>
+                    </div>
+                    <div class="icon">
+                    </div>
+                    <clr-tooltip>
+                        <cds-icon *ngIf="!item.valid" status="danger" size="lg" solid shape="error-standard" clrTooltipTrigger (click)="alertErrors(item)"></cds-icon>
+                        <span class="tooltip-content">{{ item.valid }} - {{ item.invalid }} - {{ item.errors }}</span>
+                    </clr-tooltip>
+                <!-- </div> -->
+            </ng-template>
+
+        </app-master-detail-control>
 
     </form>
 </div>
