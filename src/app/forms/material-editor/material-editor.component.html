@@ -7,6 +7,41 @@
             <clr-control-error>Error message that appears after focus is lost and control is invalid</clr-control-error>
         </clr-input-container>
 
+        <clr-input-container>
+            <label>Description</label>
+            <input clrInput type="text" formControlName="description" />
+            <clr-control-helper>Helper text that shows while it is pristine and valid</clr-control-helper>
+            <clr-control-error>Error message that appears after focus is lost and control is invalid</clr-control-error>
+        </clr-input-container>
+
+        <clr-input-container>
+            <label>Category</label>
+            <input clrInput type="text" formControlName="category" />
+            <clr-control-helper>Helper text that shows while it is pristine and valid</clr-control-helper>
+            <clr-control-error>Error message that appears after focus is lost and control is invalid</clr-control-error>
+        </clr-input-container>
+
+        <clr-input-container>
+            <label>Base Cost (per unit)</label>
+            <input clrInput type="number" formControlName="baseCost" />
+            <clr-control-helper>Helper text that shows while it is pristine and valid</clr-control-helper>
+            <clr-control-error>Error message that appears after focus is lost and control is invalid</clr-control-error>
+        </clr-input-container>
+
+        <clr-input-container>
+            <label>Supplier</label>
+            <input clrInput type="text" formControlName="supplier" />
+            <clr-control-helper>Helper text that shows while it is pristine and valid</clr-control-helper>
+            <clr-control-error>Error message that appears after focus is lost and control is invalid</clr-control-error>
+        </clr-input-container>
+
+        <clr-input-container>
+            <label>Supplier Item Url</label>
+            <input clrInput type="text" formControlName="supplierItemUrl" />
+            <clr-control-helper>Helper text that shows while it is pristine and valid</clr-control-helper>
+            <clr-control-error>Error message that appears after focus is lost and control is invalid</clr-control-error>
+        </clr-input-container>
+
         <app-master-detail-control formControlName="options" [innerForm]="formDef">
             <ng-template let-item #myTag>
                 <!-- <div class="list-item" list-item  fxLayout="row" fxLayoutAlign="space-between center" > -->
