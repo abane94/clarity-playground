@@ -44,7 +44,7 @@ export abstract class GenericControlValueAccessor<T> implements ControlValueAcce
       }
     }
 
-    writeValue(value: T | null | undefined): void {  // the input here is a union, the other is not
+    writeValue(value: T | null | undefined): void {
       if (!value) {
         return;
       }
@@ -65,16 +65,6 @@ export abstract class GenericControlValueAccessor<T> implements ControlValueAcce
     }
 
     abstract _createFormGroup(): void;
-    // {
-    //   this._form = this._fb.group({
-    //     conjunctor: null,
-    //     conditions: this._fb.array([]),
-    //     groups: this._fb.array([])
-    //   });
-
-    //   // add one condition on the next tick, after the form creation   // ARIS: this is different and seems to be important to angular timing
-    //   setTimeout(() => this._addCondition());
-    // }
 
     private _setupObservables() {
       this._form.valueChanges.pipe(takeUntil(this._destroy$)).subscribe(value => {

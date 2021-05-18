@@ -10,9 +10,7 @@ import { FormFieldDefinition } from '../user-defined-form-viewer/user-defined-fo
 export class MaterialEditorComponent implements OnInit {
   public formDef!: { key: string, fields: FormFieldDefinition[] };
   form: FormGroup;
-  // itemsArray: FormArray;
 
-  // i: FormFieldDefinition[] = [];
   constructor(private fb: FormBuilder) {
     this.form = fb.group({
       name: '',
@@ -81,24 +79,9 @@ export class MaterialEditorComponent implements OnInit {
   }
 
 
-  // createItem() {
-  //   return this.fb.group({
-  //     type: 'TEXT',
-  //     key: ['', Validators.required],
-  //     label: ['', Validators.required],
-  //     placeholder: '',
-  //     default: '',
-  //     required: false,
-  //   });
-  // }
-
   print() {
     console.log(JSON.stringify(this.form.value))
   }
-
-  // add() {
-  //   this.itemsArray.push(this.createItem());
-  // }
 
   alertErrors(item: AbstractControl) {
     const invalid: Record<string, any> = {};
@@ -307,147 +290,5 @@ export class MaterialEditorComponent implements OnInit {
         }
       ]
     };
-
-*/
-
-
-
-/*
-        Full material as inner form
-
-
-{
-      key: 'Material',
-      fields: [
-        // cost: number;  // base cost - last ordered cost?
-        // suplier: string or id;
-        {
-          type: 'TEXT',
-          key: 'name',
-          label: 'Material Name',
-          placeholder: 'Name',
-          required: true,
-          default: ''
-        },
-        {
-          type: 'TEXT',
-          key: 'Description',
-          label: 'Description',
-          placeholder: 'Name',
-          required: true,
-          default: ''
-        },
-        {
-          type: 'NESTED',
-          key: 'tags',
-          label: 'Tags',
-          innerForm: {
-            key: 'MaterialTags',
-            fields: [
-              {
-                type: 'TEXT',
-                key: 'tag',
-                label: 'Tag',
-                placeholder: '',
-                required: true
-              }
-            ]
-          }
-        },
-        {
-          // TODO: select with queried data
-          type: 'TEXT',
-          key: 'category',
-          label: 'Material Category',
-          placeholder: '',
-          required: true,
-          default: ''
-        },
-        {
-          type: 'NUMBER',
-          key: 'cost',
-          label: 'Base Cost',
-          required: true,
-          default: 0,
-          step: 0.01
-        },
-        {
-          // TODO: select with queried data
-          type: 'TEXT',
-          key: 'supplier',
-          label: 'Supplier',
-          placeholder: '',
-          required: true,
-          default: ''
-        },
-        {
-          type: 'TEXT',
-          key: 'supplierLink',
-          label: 'Supplier Item Link',
-          placeholder: '',
-          required: false,
-          default: ''
-        },
-        {
-          type: 'NESTED',
-          key: 'options',
-          label: 'Options',
-          innerForm: {
-            key: 'CAN_YOU_SEE_THIS',
-            fields: [
-              {
-                type: 'TEXT',
-                key: 'name',
-                label: 'Options Name',
-                placeholder: '',
-                required: true
-              },
-              {
-                type: 'NESTED',
-                key: 'selections',
-                label: 'Selections',
-                innerForm: {
-                  key: 'CAN_YOU_SEE_THIS-SELECTIONS',
-                  fields: [
-                    {
-                      type: 'TEXT',
-                      key: 'value',
-                      label: 'Value',
-                      placeholder: '',
-                      required: true
-                    },
-                    {
-                      type: 'TEXT',
-                      key: 'display',
-                      label: 'Display',
-                      placeholder: '',
-                      required: true
-                    },
-                    {
-                      type: 'TEXT',
-                      key: 'img',
-                      label: 'Image',
-                      placeholder: '',
-                      required: false
-                    },
-                    {
-                      type: 'NUMBER',
-                      key: 'priceAdjustment',
-                      label: 'Price Adjustment (per unit)',
-                      // placeholder: '',
-                      required: false,
-                      step: 0.01
-                    }
-                  ]
-                }
-              }
-            ]
-          }
-        }
-
-      ]
-    }
-
-
 
 */

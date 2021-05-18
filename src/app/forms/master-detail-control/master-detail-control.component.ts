@@ -31,62 +31,13 @@ export class MasterDetailControlComponent extends GenericControlValueAccessor<an
     this._form = _fb.group({items: this.itemsArray});
 
   }
-//   ngOnInit(): void {
-//     // this.fb.array( [this.createItem()] );
-//     // this.fb.group({items: this.itemsArray});
-//     this.add();
-
-//     // this.itemsArray = this.fb.array([]);
-//     // this.form = this.fb.group({items: this.itemsArray});
-//     this.itemsArray.valueChanges.subscribe(value => {
-//       if (this._changeHandler) {
-//         this._changeHandler(this.itemsArray?.value);
-//       }
-//     });
-//   }
-
-//   get value(): any {
-//     // throw new Error('Method not implemented.');
-//     return this.itemsArray?.value;
-//   }
-//   set value(v: any) {
-//     // throw new Error('Method not implemented.');
-//     this.itemsArray?.setValue(v);
-//   }
-
-//   writeValue(obj: any): void {
-//       if (!this.initialSet) {
-//           this.initial = obj;
-//           this.initialSet = true
-//       }
-//       if (obj === null) {
-//           // angular will write null during reset if no arguments are given
-//           // this.val = this.initial,
-//           this.itemsArray?.setValue(this.initial);
-//           this._changeHandler(this.val);
-//       } else {
-//           this.value = obj;
-//       }
-//   }
-
-//   _setDisabledState(isDisabled: boolean): void {
-//     throw new Error('Method not implemented.');
-//   }
 
   _createFormGroup() {
     // TODO: this has to wait to be called until inputs are available
-
-    // this._form = this._fb.group({
-    //   conjunctor: null,
-    //   conditions: this._fb.array([]),
-    //   groups: this._fb.array([])
-    // });
-
-
     this.itemsArray = this._fb.array([]);
     this._form = this._fb.group({items: this.itemsArray});
 
-    // add one condition on the next tick, after the form creation   // ARIS: this is different and seems to be important to angular timing
+    // add one item on the next tick, after the form creation
     setTimeout(() => this.add());
   }
 
@@ -99,10 +50,6 @@ export class MasterDetailControlComponent extends GenericControlValueAccessor<an
       console.warn('No Inner form');
       return;
     }
-    // const controlObj: Record<string,any> = {};
-    // for (const fieldDef of this.innerForm.fields) {
-    //   controlObj[fieldDef.key] = '';   // TODO: find away to get the initial value from the data some how   (this.form.controls.items as FormArray).value ...
-    // }
 
     const itemFormDef = UserDefinedFormViewerComponent.buildFormObject(this.innerForm);
     return this._fb.control(itemFormDef, [this.createValidator('key')]);

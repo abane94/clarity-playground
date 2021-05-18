@@ -1,5 +1,3 @@
-<p>user-defined-form-viewer works!</p>
-
 <!-- form header information and wrappers etc...-->
 
 <form *ngIf="_form && formDef" clrForm [formGroup]="_form" class="clr-form clr-form-horizontal"> <!-- TODO: conditional logic to determin layout-->
@@ -66,31 +64,3 @@
 <button class="btn btn-primary" (click)="printValue()">Primary</button>
 
 {{ Errors | json }}
-
-
-<!-- <div *ngFor="let field of formDef.fields;">
-    <div [ngSwitch]="field.type">
-        <div *ngSwitchCase="TEXT">
-            <clr-input-container>
-                <label>{{ field.lable }}{{ field.required ? '*' : '' }}</label>
-                <input clrInput type="text" [formControlName]="field.key" />
-                <clr-control-helper>Helper text that shows while it is pristine and valid</clr-control-helper>
-                <clr-control-error>Error message that appears after focus is lost and control is invalid</clr-control-error>
-            </clr-input-container>
-        </div>
-        <div *ngSwitchCase="NUMBER">
-            <clr-input-container>
-                <label>{{ field.lable }}{{ field.required ? '*' : '' }}</label>
-                <input clrInput type="number" [formControlName]="field.key" [step]="field.step"/>
-                <clr-control-helper>Helper text that shows while it is pristine and valid</clr-control-helper>
-                <clr-control-error>Error message that appears after focus is lost and control is invalid</clr-control-error>
-            </clr-input-container>
-        </div>
-    </div>
-</div> -->
-<!--
-key: string;
-  label: string;
-  placeholder?: string;
-  default?: T;
-  required?: boolean; -->

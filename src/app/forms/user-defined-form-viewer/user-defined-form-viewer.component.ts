@@ -117,48 +117,13 @@ export class UserDefinedFormViewerComponent extends GenericControlValueAccessor<
 
   constructor(_fb: FormBuilder) {
     super(_fb);
-    // console.log('constructor');
   }
 
-  // _setDisabledState(isDisabled: boolean): void {
-  //   throw new Error('Method not implemented.');
-  // }
-
-  // ngOnInit(): void {
-
-  //   this.buildForm();
-  // }
-
-  // private buildForm() {
-  //   if (!this.formDef) {
-  //     console.error('Form Def does not exist!!!');
-  //     return;
-  //   }
-  //   const formObj = UserDefinedFormViewerComponent.buildFormObject(this.formDef);
-  //   this.form = this.fb.group(formObj);
-
-  //   this.form.valueChanges.subscribe(val => {
-  //     // console.log('Inner form changed');
-  //     if (this._changeHandler && this.form) {
-  //       this._changeHandler(this.form.value);
-  //     }
-  //   });
-  // }
 
   _createFormGroup() {
-    // TODO: this has to wait to be called until inputs are available
-
-    // this._form = this._fb.group({
-    //   conjunctor: null,
-    //   conditions: this._fb.array([]),
-    //   groups: this._fb.array([])
-    // });
 
     const formObj = UserDefinedFormViewerComponent.buildFormObject(this.formDef);
     this._form = this._fb.group(formObj);
-
-    // add one condition on the next tick, after the form creation   // ARIS: this is different and seems to be important to angular timing
-    // setTimeout(() => this.add());
   }
 
   printValue() {
