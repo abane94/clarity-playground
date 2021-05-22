@@ -43,10 +43,10 @@
         </clr-input-container>
 
         <app-master-detail-control formControlName="options" [innerForm]="formDef">
-            <ng-template let-item #myTag>
+            <ng-template let-item named-template="MaterialOptions">
                     <div  fxLayout="column" fxLayoutAlign="space-between start">
-                        <div class="key-display">{{ item?.value?.key || ' ' }}{{ item?.value?.required ? '*' : '' }}</div>
-                        <div class="type-display">{{ item?.value?.type || ' ' }}</div>
+                        <!-- <div class="key-display">{{ item?.value?.key || ' ' }}{{ item?.value?.required ? '*' : '' }}</div> -->
+                        <div class="type-display">{{ item?.value?.name || ' ' }}</div>
                     </div>
                     <div class="icon">
                     </div>
@@ -54,6 +54,19 @@
                         <cds-icon *ngIf="!item.valid" status="danger" size="lg" solid shape="error-standard" clrTooltipTrigger (click)="alertErrors(item)"></cds-icon>
                         <span class="tooltip-content">{{ item.valid }} - {{ item.invalid }} - {{ item.errors }}</span>
                     </clr-tooltip>
+            </ng-template>
+
+            <ng-template let-item named-template="SelectionsInnerForm">
+                <div  fxLayout="column" fxLayoutAlign="space-between start">
+                    <div class="type-display">{{ item?.value?.display || ' ' }}</div>
+                    <div>+ {{ item?.value?.priceAdjustment | currency }}</div>
+                </div>
+                <div class="icon">
+                </div>
+                <clr-tooltip>
+                    <cds-icon *ngIf="!item.valid" status="danger" size="lg" solid shape="error-standard" clrTooltipTrigger (click)="alertErrors(item)"></cds-icon>
+                    <span class="tooltip-content">{{ item.valid }} - {{ item.invalid }} - {{ item.errors }}</span>
+                </clr-tooltip>
             </ng-template>
 
         </app-master-detail-control>

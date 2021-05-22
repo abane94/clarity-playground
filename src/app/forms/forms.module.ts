@@ -7,11 +7,12 @@ import { ListItemModalContainerComponent } from './list-item-modal-container/lis
 import { MasterDetailControlComponent } from './master-detail-control/master-detail-control.component';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { MaterialEditorComponent } from './material-editor/material-editor.component';
+import { NamedTemplateDirective } from './named-template/named-template.directive';
 
 
 
 @NgModule({
-  declarations: [UserDefinedFormViewerComponent, ListItemModalContainerComponent, MasterDetailControlComponent, MaterialEditorComponent],
+  declarations: [UserDefinedFormViewerComponent, ListItemModalContainerComponent, MasterDetailControlComponent, MaterialEditorComponent, NamedTemplateDirective],
   imports: [
     CommonModule,
     ClarityModule,
@@ -22,6 +23,6 @@ import { MaterialEditorComponent } from './material-editor/material-editor.compo
   schemas: [
     CUSTOM_ELEMENTS_SCHEMA // Tells Angular we will have custom tags in our templates
   ],
-  exports: [UserDefinedFormViewerComponent, ListItemModalContainerComponent, MasterDetailControlComponent, MaterialEditorComponent]
+  exports: [UserDefinedFormViewerComponent, ListItemModalContainerComponent, MasterDetailControlComponent, MaterialEditorComponent, NamedTemplateDirective]
 })
 export class FormsModule { }

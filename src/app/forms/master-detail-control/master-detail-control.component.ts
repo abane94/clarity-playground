@@ -1,6 +1,7 @@
-import { Component, ContentChild, ContentChildren, Input, OnInit, QueryList, TemplateRef } from '@angular/core';
+import { AfterViewInit, Component, ContentChild, ContentChildren, Input, OnInit, QueryList, TemplateRef } from '@angular/core';
 import { AbstractControl, FormArray, FormBuilder, FormGroup, ValidatorFn, Validators } from '@angular/forms';
 import { GenericControlProvider, GenericControlValueAccessor } from '../GenericControlValueAccessor';
+import { NamedTemplateDirective } from '../named-template/named-template.directive';
 import { FormDefinition, FormFieldDefinition, FormFieldDefinitionBase, UserDefinedFormViewerComponent } from '../user-defined-form-viewer/user-defined-form-viewer.component';
 
 @Component({
@@ -9,13 +10,21 @@ import { FormDefinition, FormFieldDefinition, FormFieldDefinitionBase, UserDefin
   styleUrls: ['./master-detail-control.component.scss'],
   providers: [GenericControlProvider(MasterDetailControlComponent)]
 })
-export class MasterDetailControlComponent extends GenericControlValueAccessor<any> implements OnInit {
+export class MasterDetailControlComponent extends GenericControlValueAccessor<any> implements OnInit, AfterViewInit {
   // items: string[] = [
   //   'what is your name?',
   //   'what is you age?'
   // ];
   // form: FormGroup;
-  @ContentChild(TemplateRef) templateRef!: TemplateRef<any>;
+
+  // @ContentChild(TemplateRef)
+  public templateRef?: TemplateRef<any>;
+  @ContentChildren(NamedTemplateDirective) templatesContent!: QueryList<NamedTemplateDirective>;
+
+  @Input('templates')
+  templatesInput: NamedTemplateDirective[] = [];
+
+  public templates: NamedTemplateDirective[] = [];
 
   itemsArray: FormArray;
 
@@ -49,6 +58,17 @@ export class MasterDetailControlComponent extends GenericControlValueAccessor<an
     }, 50);
 
   }
+
+  ngAfterViewInit() {
+    this.templates.push(...this.templatesContent.toArray(), ...this.templatesInput);
+    for (const t of this.templates) {
+      if (t.templateName === this.innerForm.key) {  // idk if I like this :  || !t.templateName
+        this.templateRef = t.template;
+      }
+    }
+
+  }
+
   _createFormGroup() {
     // TODO: this has to wait to be called until inputs are available
     this.itemsArray = this._fb.array([]);

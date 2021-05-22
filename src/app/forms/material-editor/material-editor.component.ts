@@ -42,7 +42,7 @@ export class MaterialEditorComponent implements OnInit {
           key: 'selections',
           label: 'Selections',
           innerForm: {
-            key: 'CAN_YOU_SEE_THIS-SELECTIONS',
+            key: 'SelectionsInnerForm',
             fields: [
               {
                 type: 'TEXT',

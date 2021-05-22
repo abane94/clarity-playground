@@ -1,6 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { GenericControlProvider, GenericControlValueAccessor } from '../GenericControlValueAccessor';
+import { NamedTemplateDirective } from '../named-template/named-template.directive';
 
 /**
  * TODO:
@@ -86,6 +87,8 @@ export class UserDefinedFormViewerComponent extends GenericControlValueAccessor<
 
   @Input()
   public formDef!: FormDefinition;
+
+  @Input() templates: NamedTemplateDirective[] = [];
 
   newDate = () => new Date()
 
