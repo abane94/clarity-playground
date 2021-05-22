@@ -11,17 +11,19 @@ export class MaterialEditorComponent implements OnInit {
   public formDef!: { key: string, fields: FormFieldDefinition[] };
   form: FormGroup;
 
+  private material = {"name":"TShirt","description":"A simple tshirt","category":"clothing","baseCost":1.45,"supplier":"gilden","supplierItemUrl":"dsagfds","options":{"items":[{"name":"Size","selections":{"items":[{"value":"M","display":"M","img":"","priceAdjustment":0},{"value":"S","display":"S","img":"","priceAdjustment":0},{"value":"XXL","display":"XXL","img":"","priceAdjustment":0.1}]}},{"name":"Color","selections":{"items":[{"value":"BLUE","display":"BLUE","img":"","priceAdjustment":0},{"value":"RED","display":"RED","img":"","priceAdjustment":0},{"value":"TIE DYE","display":"TIE","img":"DYE","priceAdjustment":0.15}]}}]}}
+
   constructor(private fb: FormBuilder) {
     this.form = fb.group({
-      name: '',
-      description: '',
-      category: '',
-      baseCost: 0.0,
-      supplier: '',
-      supplierItemUrl: '',
+      name: this.material.name,
+      description: this.material.description,
+      category: this.material.category,
+      baseCost: this.material.baseCost,
+      supplier: this.material.supplier,
+      supplierItemUrl: this.material.supplierItemUrl,
       // tags: [{}],
 
-      options: []
+      options: this.material.options
     });
   }
   ngOnInit(): void {

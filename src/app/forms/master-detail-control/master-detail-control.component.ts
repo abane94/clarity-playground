@@ -32,6 +32,23 @@ export class MasterDetailControlComponent extends GenericControlValueAccessor<an
 
   }
 
+  writeValue(value: any | null | undefined): void {
+    if (!value) {  // TODO: I thought if the value was null it meant reset, determine if this is correct
+      return;
+    }
+    setTimeout(() => {
+      if (value.items?.length) {
+        this.itemsArray.clear();
+        value.items.forEach((i: any) => this.add());
+      }
+      // if (value.groups.length) {
+      //   this.itemsArray.clear();
+      //   value.groups.forEach(g => this._addGroup());
+      // }
+      this._form.patchValue(value);
+    }, 50);
+
+  }
   _createFormGroup() {
     // TODO: this has to wait to be called until inputs are available
     this.itemsArray = this._fb.array([]);
