@@ -1,1 +1,31 @@
 <p>materials-list-page works!</p>
+
+
+<clr-datagrid [(clrDgSelected)]="selected">
+    <clr-dg-column>Name</clr-dg-column>
+    <clr-dg-column>Supplier</clr-dg-column>
+    <clr-dg-column>Base Cost</clr-dg-column>
+    <clr-dg-column>Description</clr-dg-column>
+
+    <clr-dg-placeholder>We couldn't find any users!</clr-dg-placeholder>
+
+    <clr-dg-row *clrDgItems="let material of materials" [clrDgItem]="material">
+      <!-- <clr-dg-cell>{{user.id}}</clr-dg-cell> -->
+      <clr-dg-cell>{{material.name}}</clr-dg-cell>
+      <clr-dg-cell>{{material.supplier}}</clr-dg-cell>
+      <clr-dg-cell>{{material.baseCost }}</clr-dg-cell>
+      <clr-dg-cell>{{material.description }}</clr-dg-cell>
+      <!-- <clr-dg-cell>
+        <span class="color-square" [style.backgroundColor]="user.color">{{user.color}}</span>
+      </clr-dg-cell> -->
+    </clr-dg-row>
+
+    <clr-dg-detail *clrIfDetail="let detail">
+        <clr-dg-detail-header>{{detail.name}}</clr-dg-detail-header>
+        <app-material-editor></app-material-editor>
+        <br/>
+        <app-user-defined-form-data-display [data]="detail" [formDef]="formDef" [nestedDisplayField]="nestedDisplayField"></app-user-defined-form-data-display>
+    </clr-dg-detail>
+
+    <clr-dg-footer>{{materials.length}} users</clr-dg-footer>
+  </clr-datagrid>
