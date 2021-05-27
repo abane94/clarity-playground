@@ -10,6 +10,9 @@ import { NamedTemplateDirective } from '../named-template/named-template.directi
  *    add a regex field that is optional, angular material supports this (?) so maybe clarity will also?
  */
 
+// helper methods to cast the fields in the template
+export const castOptionsField = (f: FormFieldDefinition) => (f as MultiFormFieldDefinition);
+export const castNestedField = (f: FormFieldDefinition) => (f as NestedFormFieldDefinition);
 
 export interface FormFieldDefinitionBase<T> {
   type: 'TEXT' | 'NUMBER' | 'CHECK' | 'RADIO' | 'TOGGLE' |'DATE' | 'AUTOCOMPLETE' /** Combo? */ | 'SELECT' | 'RANGE' | 'TEXTAREA' | 'NESTED';  // TODO could have phone and email options, or those could be validators. HTML might have input types of these...
@@ -115,8 +118,8 @@ export class UserDefinedFormViewerComponent extends GenericControlValueAccessor<
 
 
   // helper methods to cast the fields in the template
-  castOptionsField = (f: FormFieldDefinition) => (f as MultiFormFieldDefinition);
-  castNestedField = (f: FormFieldDefinition) => (f as NestedFormFieldDefinition);
+  castOptionsField = castOptionsField;
+  castNestedField = castNestedField;
 
   constructor(_fb: FormBuilder) {
     super(_fb);

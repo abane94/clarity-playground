@@ -1,0 +1,27 @@
+<table class="table user-defined-data-view">
+
+    <tbody>
+      <tr *ngFor="let field of formDef.fields;">
+        <td>{{ field.label }}</td>
+        <td>
+            <ng-container [ngSwitch]="field.type">
+                <ng-container *ngSwitchCase="'NESTED'">
+                    <clr-accordion>
+                        <clr-accordion-panel *ngFor="let subData of data[field.key].items; let i = index">
+                          <clr-accordion-title>{{ accordionPanelDisplay(subData, field) }}</clr-accordion-title>
+                          <clr-accordion-content [*clrIfExpanded] >
+                            <app-user-defined-form-data-display  [formDef]="castNestedField(field).innerForm" [data]="subData" [nestedDisplayField]="getNestedDisplayFieldObject(field)"></app-user-defined-form-data-display>
+                          </clr-accordion-content>
+                        </clr-accordion-panel>
+                    </clr-accordion>
+                </ng-container>
+
+                <ng-container *ngSwitchDefault>
+                    {{ data[field.key]}}
+                </ng-container>
+            </ng-container>
+        </td>
+      </tr>
+
+    </tbody>
+  </table>
